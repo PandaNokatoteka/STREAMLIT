@@ -32,12 +32,6 @@ if use_demo:
 
 adata = sc.read(DEMO_FILENAME)
 
-
-else:
-    uploaded_file = st.file_uploader("Ανεβάστε αρχείο .h5ad", type=["h5ad"])
-    if uploaded_file is not None:
-        adata_path = uploaded_file
-
 if 'adata_path' in locals():
     st.sidebar.header("⚙️ Ρυθμίσεις Pipeline")
     normalize = st.sidebar.checkbox("Normalize Data", value=True)
