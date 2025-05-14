@@ -11,7 +11,7 @@ st.title("🔬 Διαδραστική Ανάλυση scRNA-seq Δεδομένω�
 st.markdown("Ανεβάστε δεδομένα ή χρησιμοποιήστε το demo dataset (pancreas) από Google Drive.")
 
 # --- Demo dataset config ---
-DEMO_URL = "https://drive.google.com/file/d/1XybfO8QZ0G3gigwwzHk-n8gopuT4iEHB/view?usp=drive_link"
+DEMO_URL = "https://drive.usercontent.google.com/u/0/uc?id=1XybfO8QZ0G3gigwwzHk-n8gopuT4iEHB&export=download"
 DEMO_FILENAME = "pancreas_data.h5ad"
 
 if data_source == "Demo Dataset":
