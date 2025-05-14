@@ -11,6 +11,18 @@ import pandas as pd
 import seaborn as sns
 import scanpy.external as sce
 import matplotlib.pyplot as plt
+import os
+import requests
+
+# --- Demo dataset config ---
+DEMO_URL = "https://drive.google.com/uc?export=download&id=YOUR_NEW_FILE_ID"
+DEMO_FILENAME = "pancreas_data.h5ad"  # Ορισμός του demo filename
+
+# Ελέγχουμε αν το αρχείο υπάρχει
+if os.path.exists(DEMO_FILENAME):
+    adata = sc.read(DEMO_FILENAME)
+else:
+    print("Το αρχείο δεν βρέθηκε.")
 
 
 # ### Load Dataset 
