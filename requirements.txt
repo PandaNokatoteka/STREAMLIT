@@ -5,3 +5,4 @@ pandas
 numpy
 anndata
 scikit-learn
+hdf5plugin
