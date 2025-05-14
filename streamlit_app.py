@@ -8,8 +8,6 @@ import scRNA_seq_pipeline
 st.set_page_config(page_title="scRNA-seq Pipeline", layout="wide")
 st.title("🔬 Διαδραστική Ανάλυση scRNA-seq Δεδομένων")
 
-st.markdown("Ανεβάστε δεδομένα ή χρησιμοποιήστε το demo dataset (pancreas) από Google Drive.")
-
 # --- Demo dataset config ---
 DEMO_URL = "https://drive.google.com/uc?export=download&id=1XybfO8QZ0G3gigwwzHk-n8gopuT4iEHB"
 DEMO_FILENAME = "pancreas_data.h5ad"
@@ -22,9 +20,7 @@ if not os.path.exists(DEMO_FILENAME):
         with open(DEMO_FILENAME, 'wb') as f:
             f.write(r.content)
         print("Το αρχείο αποθηκεύτηκε.")
-if use_demo:
-    try:
-        # προσπάθεια να κατεβάσει το demo αρχείο
+    try
         adata = sc.read(DEMO_FILENAME)
     except:
         raise Exception("Σφάλμα κατά το κατέβασμα του αρχείου.")
