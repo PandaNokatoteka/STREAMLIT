@@ -3,7 +3,7 @@ import scanpy as sc
 import matplotlib.pyplot as plt
 import os
 import requests
-import scRNA_seq_pipeline
+import scRNA_seq_pipeline.py
 
 st.set_page_config(page_title="scRNA-seq Pipeline", layout="wide")
 st.title("🔬 Διαδραστική Ανάλυση scRNA-seq Δεδομένων")
