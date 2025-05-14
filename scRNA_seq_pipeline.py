@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 # In[2]:
 
 
-adata = sc.read('./pbmc3k.h5ad')
+adata = sc.read('./pancreas_data.h5ad')
 adata
 
 
