@@ -22,7 +22,12 @@ if not os.path.exists(DEMO_FILENAME):
         with open(DEMO_FILENAME, 'wb') as f:
             f.write(r.content)
         print("Το αρχείο αποθηκεύτηκε.")
-    else:
+if use_demo:
+    try:
+        # προσπάθεια να κατεβάσει το demo αρχείο
+        adata = sc.read(DEMO_FILENAME)
+    except:
+        raise Exception("Σφάλμα κατά το κατέβασμα του αρχείου.")
         raise Exception("Σφάλμα κατά το κατέβασμα του αρχείου.")
 
 adata = sc.read(DEMO_FILENAME)
@@ -64,7 +69,7 @@ if 'adata_path' in locals():
         if "rank_genes_groups" in adata.uns:
             sc.pl.rank_genes_groups(adata, n_genes=10, sharey=False, show=False)
             st.pyplot(plt.gcf())
-        else:
+else:
             st.warning("⚠️ Δεν εντοπίστηκε ανάλυση διαφορικής έκφρασης.")
 else:
     st.info("📥 Παρακαλώ ανεβάστε ή επιλέξτε δεδομένα για ανάλυση.")
