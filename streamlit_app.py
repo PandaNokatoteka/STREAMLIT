@@ -2,6 +2,7 @@ import streamlit as st
 import scanpy as sc
 import matplotlib.pyplot as plt
 import os
+import requests
 import scRNA_seq_pipeline
 
 st.set_page_config(page_title="scRNA-seq Pipeline", layout="wide")
