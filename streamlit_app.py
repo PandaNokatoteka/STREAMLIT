@@ -11,17 +11,22 @@ st.title("🔬 Διαδραστική Ανάλυση scRNA-seq Δεδομένω�
 st.markdown("Ανεβάστε δεδομένα ή χρησιμοποιήστε το demo dataset (pancreas) από Google Drive.")
 
 # --- Demo dataset config ---
-DEMO_URL = "https://drive.usercontent.google.com/u/0/uc?id=1XybfO8QZ0G3gigwwzHk-n8gopuT4iEHB&export=download"
+DEMO_URL = "https://drive.google.com/uc?export=download&id=1XybfO8QZ0G3gigwwzHk-n8gopuT4iEHB"
 DEMO_FILENAME = "pancreas_data.h5ad"
 
-if data_source == "Demo Dataset":
-    if not os.path.exists(DEMO_FILENAME):
-        st.info("📥 Γίνεται λήψη του demo αρχείου από Google Drive...")
-        with open(DEMO_FILENAME, "wb") as f:
-            response = requests.get(DEMO_URL)
-            f.write(response.content)
-        st.success("✅ Το demo dataset κατέβηκε με επιτυχία.")
-    adata_path = DEMO_FILENAME
+# Αν δεν υπάρχει το αρχείο, κάνε download
+if not os.path.exists(DEMO_FILENAME):
+    print("Κατεβάζω το αρχείο...")
+    r = requests.get(DEMO_URL)
+    if r.status_code == 200:
+        with open(DEMO_FILENAME, 'wb') as f:
+            f.write(r.content)
+        print("Το αρχείο αποθηκεύτηκε.")
+    else:
+        raise Exception("Σφάλμα κατά το κατέβασμα του αρχείου.")
+
+adata = sc.read(DEMO_FILENAME)
+
 
 else:
     uploaded_file = st.file_uploader("Ανεβάστε αρχείο .h5ad", type=["h5ad"])
