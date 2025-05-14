@@ -29,11 +29,6 @@ else:
 
 # In[2]:
 
-if os.path.exists(DEMO_FILENAME):
-    adata = sc.read(DEMO_FILENAME)
-else:
-    st.error("Το αρχείο δεν βρέθηκε. Παρακαλώ ελέγξτε αν έχει κατέβει σωστά.")
-
 
 
 # In[3]:
