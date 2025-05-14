@@ -2,7 +2,6 @@ import streamlit as st
 import scanpy as sc
 import matplotlib.pyplot as plt
 import os
-import requests
 from scRNA_seq_pipeline import run_pipeline  # Φρόντισε να υπάρχει και να έχει run_pipeline()
 
 st.set_page_config(page_title="scRNA-seq Pipeline", layout="wide")
