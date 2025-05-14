@@ -19,7 +19,6 @@ import matplotlib.pyplot as plt
 
 
 adata = sc.read(DEMO_FILENAME)
-adata
 
 
 # In[3]:
