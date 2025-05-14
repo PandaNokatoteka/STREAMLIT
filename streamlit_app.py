@@ -14,7 +14,7 @@ st.markdown("Ανεβάστε δεδομένα ή χρησιμοποιήστε �
 data_source = st.radio("Επιλογή δεδομένων:", ("Demo Dataset", "Ανέβασμα αρχείου (.h5ad)"))
 
 if data_source == "Demo Dataset":
-    adata_path = "pancreas_data.h5ad"
+    adata_path = "pbmc3k.h5ad"
 else:
     uploaded_file = st.file_uploader("Ανεβάστε .h5ad αρχείο", type=["h5ad"])
     if uploaded_file is not None:
