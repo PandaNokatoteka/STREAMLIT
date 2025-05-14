@@ -17,6 +17,7 @@ if not os.path.exists(DEMO_FILENAME):
     print("Κατεβάζω το αρχείο...")
     r = requests.get(DEMO_URL)
     if r.status_code == 200:
+        print("Status code from request:", r.status_code)
         with open(DEMO_FILENAME, 'wb') as f:
             f.write(r.content)
         print("Το αρχείο αποθηκεύτηκε.")
@@ -24,6 +25,9 @@ if not os.path.exists(DEMO_FILENAME):
         adata = sc.read(DEMO_FILENAME)
     except:
         raise Exception("Σφάλμα κατά το κατέβασμα του αρχείου.")
+
+print("Υπάρχει το αρχείο;", os.path.exists(DEMO_FILENAME))
+print("Path:", DEMO_FILENAME)
 
 adata = sc.read(DEMO_FILENAME)
 
