@@ -20,10 +20,9 @@ if not os.path.exists(DEMO_FILENAME):
         with open(DEMO_FILENAME, 'wb') as f:
             f.write(r.content)
         print("Το αρχείο αποθηκεύτηκε.")
-    try
+    try:
         adata = sc.read(DEMO_FILENAME)
     except:
-        raise Exception("Σφάλμα κατά το κατέβασμα του αρχείου.")
         raise Exception("Σφάλμα κατά το κατέβασμα του αρχείου.")
 
 adata = sc.read(DEMO_FILENAME)
