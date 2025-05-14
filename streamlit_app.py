@@ -63,7 +63,7 @@ if 'adata_path' in locals():
         if "rank_genes_groups" in adata.uns:
             sc.pl.rank_genes_groups(adata, n_genes=10, sharey=False, show=False)
             st.pyplot(plt.gcf())
-else:
+        else:
             st.warning("⚠️ Δεν εντοπίστηκε ανάλυση διαφορικής έκφρασης.")
-else:
+    else:
     st.info("📥 Παρακαλώ ανεβάστε ή επιλέξτε δεδομένα για ανάλυση.")
