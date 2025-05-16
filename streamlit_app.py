@@ -45,19 +45,19 @@ else:
     if uploaded_file is not None:
         try:
             adata = sc.read_h5ad(uploaded_file)
-            # Προετοιμασία UMAP αν δεν υπάρχει
-if "X_umap" not in adata.obsm:
-    st.info("🔄 Υπολογίζουμε UMAP coordinates...")
-    try:
-        sc.pp.neighbors(adata)
-        sc.tl.umap(adata)
-    except Exception as e:
-        st.error(f"❌ Σφάλμα κατά τον υπολογισμό UMAP: {e}")
-        st.stop()
+        except Exception as e:
+            st.error(f"❌ Σφάλμα κατά την ανάγνωση του αρχείου: {e}")
+            st.stop()
+        # Προετοιμασία UMAP αν δεν υπάρχει
+        if "X_umap" not in adata.obsm:
+            st.info("🔄 Υπολογίζουμε UMAP coordinates...")
+            try:
+                sc.pp.neighbors(adata)
+                sc.tl.umap(adata)
+            except Exception as e:
+                st.error(f"❌ Σφάλμα κατά τον υπολογισμό UMAP: {e}")
+                st.stop()
 
-except Exception as e:
-    st.error(f"❌ Σφάλμα κατά την ανάγνωση του αρχείου: {e}")
-    st.stop()
     else:
         st.warning("📂 Περιμένουμε αρχείο .h5ad...")
         st.stop()
