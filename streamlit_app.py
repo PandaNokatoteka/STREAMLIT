@@ -1,68 +1,80 @@
-import streamlit as st
-import scanpy as sc
-import matplotlib.pyplot as plt
 import os
-import requests
-import scRNA_seq_pipeline
+import scanpy as sc
+import streamlit as st
+import gdown
+import matplotlib.pyplot as plt
 
-st.set_page_config(page_title="scRNA-seq Pipeline", layout="wide")
-st.title("🔬 Διαδραστική Ανάλυση scRNA-seq Δεδομένων")
+# Βασικές ρυθμίσεις εμφάνισης
+st.set_page_config(layout="wide")
+st.title("🔬 Single-cell RNA-seq Viewer")
 
-# --- Demo dataset config ---
-DEMO_URL = "https://drive.google.com/uc?export=download&id=1XybfO8QZ0G3gigwwzHk-n8gopuT4iEHB"
+DEMO_FILE_ID = "1XybfO8QZ0G3gigwwzHk-n8gopuT4iEHB"
 DEMO_FILENAME = "pancreas_data.h5ad"
 
-# Αν δεν υπάρχει το αρχείο, κάνε download
-if not os.path.exists(DEMO_FILENAME):
-    print("Κατεβάζω το αρχείο...")
-    r = requests.get(DEMO_URL)
-    if r.status_code == 200:
-        print("Status code from request:", r.status_code)
-        with open(DEMO_FILENAME, 'wb') as f:
-            f.write(r.content)
-        print("Το αρχείο αποθηκεύτηκε.")
+
+@st.cache_data(show_spinner=False)
+def get_demo_data():
+    """Λήψη και ανάγνωση demo αρχείου με ασφάλεια"""
+    if not os.path.exists(DEMO_FILENAME):
+        st.info("📥 Κατεβάζουμε demo αρχείο από Google Drive...")
+        url = f"https://drive.google.com/uc?id={DEMO_FILE_ID}"
+        try:
+            gdown.download(url, DEMO_FILENAME, quiet=False)
+        except Exception as e:
+            st.error(f"❌ Αποτυχία λήψης αρχείου: {e}")
+            st.stop()
+
     try:
-        adata = sc.read(DEMO_FILENAME)
-    except:
-        raise Exception("Σφάλμα κατά το κατέβασμα του αρχείου.")
+        adata = sc.read_h5ad(DEMO_FILENAME)
+        return adata
+    except Exception as e:
+        st.error(f"❌ Σφάλμα κατά την ανάγνωση του αρχείου: {e}")
+        st.stop()
 
-print("Υπάρχει το αρχείο;", os.path.exists(DEMO_FILENAME))
-print("Path:", DEMO_FILENAME)
 
-adata = sc.read(DEMO_FILENAME)
+# Από εδώ ξεκινά η εφαρμογή
+st.sidebar.header("🧬 Ρυθμίσεις δεδομένων")
 
-if 'adata_path' in locals():
-    st.sidebar.header("⚙️ Ρυθμίσεις Pipeline")
-    normalize = st.sidebar.checkbox("Normalize Data", value=True)
-    log1p = st.sidebar.checkbox("Log1p Transform", value=True)
-    min_genes = st.sidebar.slider("Ελάχιστα γονίδια ανά κύτταρο", 0, 200, 50)
-    resolution = st.sidebar.slider("Clustering Resolution", 0.1, 2.0, 1.0, step=0.1)
+# Δυνατότητα χρήσης demo ή ανέβασμα custom αρχείου
+use_demo = st.sidebar.checkbox("Χρήση demo dataset", value=True)
 
-    if st.button("🔁 Εκτέλεση Pipeline"):
-        with st.spinner("⏳ Εκτελείται το pipeline..."):
-            adata = run_pipeline(
-                adata_path=adata_path,
-                normalize=normalize,
-                log1p=log1p,
-                min_genes=min_genes,
-                resolution=resolution
-            )
-
-        st.success("✅ Ολοκληρώθηκε η ανάλυση!")
-
-        st.subheader("📊 PCA Projection")
-        sc.pl.pca(adata, show=False)
-        st.pyplot(plt.gcf())
-
-        st.subheader("🧭 UMAP Projection")
-        sc.pl.umap(adata, color=['leiden'], show=False)
-        st.pyplot(plt.gcf())
-
-        st.subheader("🧬 Διαφορική Έκφραση")
-        if "rank_genes_groups" in adata.uns:
-            sc.pl.rank_genes_groups(adata, n_genes=10, sharey=False, show=False)
-            st.pyplot(plt.gcf())
-        else:
-            st.warning("⚠️ Δεν εντοπίστηκε ανάλυση διαφορικής έκφρασης.")
+if use_demo:
+    adata = get_demo_data()
+else:
+    uploaded_file = st.sidebar.file_uploader("Ανέβασε .h5ad αρχείο", type=["h5ad"])
+    if uploaded_file is not None:
+        try:
+            adata = sc.read_h5ad(uploaded_file)
+        except Exception as e:
+            st.error(f"❌ Σφάλμα κατά την ανάγνωση του αρχείου: {e}")
+            st.stop()
     else:
-        st.info("📥 Παρακαλώ ανεβάστε ή επιλέξτε δεδομένα για ανάλυση.")
+        st.warning("📂 Περιμένουμε αρχείο .h5ad...")
+        st.stop()
+
+
+# Εμφάνιση βασικών πληροφοριών
+st.subheader("📊 Βασικές πληροφορίες dataset")
+st.markdown(f"**Σχήμα δεδομένων:** {adata.X.shape[0]} κελιά × {adata.X.shape[1]} γονίδια")
+st.markdown(f"**Διαθέσιμα AnnData.obs:** {', '.join(adata.obs.columns)}")
+st.markdown(f"**Διαθέσιμα AnnData.var:** {', '.join(adata.var.columns)}")
+
+# Επιλογή cluster (αν υπάρχει)
+if "louvain" in adata.obs.columns:
+    st.subheader("🧩 Cluster visualization")
+    fig, ax = plt.subplots()
+    sc.pl.umap(adata, color="louvain", ax=ax, show=False)
+    st.pyplot(fig)
+
+# Επιλογή γονιδίων για plotting
+st.subheader("🎯 Gene expression")
+gene_list = st.multiselect("Διάλεξε γονίδια:", list(adata.var_names), default=adata.var_names[:1])
+
+for gene in gene_list:
+    if gene in adata.var_names:
+        fig, ax = plt.subplots()
+        sc.pl.umap(adata, color=gene, ax=ax, show=False)
+        st.pyplot(fig)
+    else:
+        st.warning(f"⚠️ Το γονίδιο {gene} δεν υπάρχει στο dataset.")
+
