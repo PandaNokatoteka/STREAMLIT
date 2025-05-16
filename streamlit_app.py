@@ -40,6 +40,14 @@ use_demo = st.sidebar.checkbox("Χρήση demo dataset", value=True)
 
 if use_demo:
     adata = get_demo_data()
+    if "X_umap" not in adata.obsm:
+            st.info("🔄 Υπολογίζουμε UMAP coordinates...")
+            try:
+                sc.pp.neighbors(adata)
+                sc.tl.umap(adata)
+            except Exception as e:
+                st.error(f"❌ Σφάλμα κατά τον υπολογισμό UMAP: {e}")
+                st.stop()    
 else:
     uploaded_file = st.sidebar.file_uploader("Ανέβασε .h5ad αρχείο", type=["h5ad"])
     if uploaded_file is not None:
