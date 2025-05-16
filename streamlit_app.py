@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 # Βασικές ρυθμίσεις εμφάνισης
 st.set_page_config(layout="wide")
-st.title("🔬 Single-cell RNA-seq Viewer")
+st.title("🔬 Εξερευνητής Μονοκυτταρικών RNA Δεδομένων")
 
 DEMO_FILE_ID = "1XybfO8QZ0G3gigwwzHk-n8gopuT4iEHB"
 DEMO_FILENAME = "pancreas_data.h5ad"
