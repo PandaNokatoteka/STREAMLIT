@@ -55,9 +55,9 @@ if "X_umap" not in adata.obsm:
         st.error(f"❌ Σφάλμα κατά τον υπολογισμό UMAP: {e}")
         st.stop()
 
-            except Exception as e:
-                st.error(f"❌ Σφάλμα κατά την ανάγνωση του αρχείου: {e}")
-                st.stop()
+except Exception as e:
+    st.error(f"❌ Σφάλμα κατά την ανάγνωση του αρχείου: {e}")
+    st.stop()
     else:
         st.warning("📂 Περιμένουμε αρχείο .h5ad...")
         st.stop()
