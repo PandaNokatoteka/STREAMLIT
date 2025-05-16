@@ -6,3 +6,4 @@ numpy
 anndata
 scikit-learn
 hdf5plugin
+gdown
